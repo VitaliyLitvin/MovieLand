@@ -5,5 +5,7 @@ import org.vlitvin.movieland.model.Movie;
 import java.util.List;
 
 public interface MovieDao {
-    List<Movie> getAllMovies();
+    List<Movie> getAll();
+    Movie getById(int movieId);
+    int getMaxMovieId();
 }

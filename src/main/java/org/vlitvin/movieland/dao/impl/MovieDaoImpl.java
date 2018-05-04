@@ -18,7 +18,8 @@ import java.util.List;
 public class MovieDaoImpl implements MovieDao {
 
     private static final String ALL_MOVIES_SELECT = "select * from MOVIE";
-    private static final String MOVIES_BY_ID_SELECT = "select * from MOVIE where ID = ?";
+    private static final String MOVIE_BY_ID_SELECT = "select * from MOVIE where ID = ?";
+    private static final String MAX_MOVIE_ID_SELECT = "select max(ID) from MOVIE";
     private static final String COUNTRIES_BY_MOVIE_ID_SELECT = "select * from MOVIE_COUNTRY mc join COUNTRY c on mc.COUNTRY_ID = c.ID where mc.MOVIE_ID = ?";
     private static final String GENRES_BY_MOVIE_ID_SELECT = "select * from MOVIE_GENRE mg join GENRE g on mg.GENRE_ID = g.ID where MOVIE_ID = ?";
 
@@ -30,7 +31,7 @@ public class MovieDaoImpl implements MovieDao {
     JdbcTemplate jdbcTemplate;
 
     @Override
-    public List<Movie> getAllMovies() {
+    public List<Movie> getAll() {
 //        HikariDataSource hikariDataSource = (HikariDataSource) dataSource;
         List<Movie> movies = jdbcTemplate.query(ALL_MOVIES_SELECT, new MovieMapper());
         for (Movie movie : movies) {
@@ -40,13 +41,27 @@ public class MovieDaoImpl implements MovieDao {
         return movies;
     }
 
+    @Override
+    public Movie getById(int movieId) {
+        Movie movie = jdbcTemplate.queryForObject(MOVIE_BY_ID_SELECT,new Object[]{movieId}, new MovieMapper());
+        movie.setGenres(getGenresByMovieId(movieId));
+        movie.setCountries(getCountriesByMovieId(movieId));
+        return movie;
+    }
+
+    @Override
+    public int getMaxMovieId() {
+
+        return 0;
+    }
+
     private List<Genre> getGenresByMovieId(int movie_id) {
-        List<Genre> genres = jdbcTemplate.query(GENRES_BY_MOVIE_ID_SELECT, new Object[]{movie_id}, new GenreMapper());
-        return genres;
+        return jdbcTemplate.query(GENRES_BY_MOVIE_ID_SELECT, new Object[]{movie_id}, new GenreMapper());
     }
 
     private List<Country> getCountriesByMovieId(int movie_id) {
-        List<Country> countries = jdbcTemplate.query(COUNTRIES_BY_MOVIE_ID_SELECT, new Object[]{movie_id}, new CountryMapper());
-        return countries;
+        return jdbcTemplate.query(COUNTRIES_BY_MOVIE_ID_SELECT, new Object[]{movie_id}, new CountryMapper());
     }
+
+
 }

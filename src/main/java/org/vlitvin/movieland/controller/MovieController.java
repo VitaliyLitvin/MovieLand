@@ -1,10 +1,7 @@
 package org.vlitvin.movieland.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.vlitvin.movieland.model.Movie;
 import org.vlitvin.movieland.service.MovieService;
 
@@ -17,9 +14,21 @@ public class MovieController {
     @Autowired
     MovieService movieService;
 
-    @GetMapping("/")
+    @GetMapping()
     @ResponseBody
     public List<Movie> getAllMovies() {
-        return movieService.getAllMovies();
+        return movieService.getAll();
+    }
+
+    @GetMapping("/{movieId}")
+    @ResponseBody
+    public Movie getMovieById(@PathVariable("movieId") int movieId) {
+        return movieService.getById(movieId);
+    }
+
+    @GetMapping("/random")
+    @ResponseBody
+    public List<Movie> getThreeRandomMovies(){
+        return movieService.getThreeRandomMovies();
     }
 }

@@ -6,5 +6,7 @@ import org.vlitvin.movieland.model.Movie;
 import java.util.List;
 
 public interface MovieService {
-    List<Movie> getAllMovies();
+    List<Movie> getAll();
+    Movie getById(int movieId);
+    List<Movie> getThreeRandomMovies();
 }

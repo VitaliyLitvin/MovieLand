@@ -6,7 +6,9 @@ import org.vlitvin.movieland.dao.MovieDao;
 import org.vlitvin.movieland.model.Movie;
 import org.vlitvin.movieland.service.MovieService;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class MovieServiceImpl implements MovieService {
@@ -15,7 +17,31 @@ public class MovieServiceImpl implements MovieService {
     MovieDao movieDao;
 
     @Override
-    public List<Movie> getAllMovies() {
-        return movieDao.getAllMovies();
+    public List<Movie> getAll() {
+        return movieDao.getAll();
+    }
+
+    @Override
+    public Movie getById(int movieId) {
+        return movieDao.getById(movieId);
+    }
+
+    @Override
+    public List<Movie> getThreeRandomMovies() {
+        List<Movie> movies = new ArrayList<>(3);
+        do {
+            Movie movie = getRandomMovie();
+            if (movie != null) {
+                movies.add(movie);
+            }
+        } while (movies.size() == 3);
+        return movies;
+    }
+
+    private Movie getRandomMovie() {
+        int maxMovieId = movieDao.getMaxMovieId();
+        Random random = new Random();
+        int randomMovieId = random.nextInt(maxMovieId);
+        return movieDao.getById(randomMovieId);
     }
 }
