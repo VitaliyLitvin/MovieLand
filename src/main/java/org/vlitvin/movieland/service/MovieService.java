@@ -7,6 +7,10 @@ import java.util.List;
 
 public interface MovieService {
     List<Movie> getAll();
+
     Movie getById(int movieId);
+
     List<Movie> getThreeRandomMovies();
+
+    List<Movie> getByGenreId(int genreId);
 }

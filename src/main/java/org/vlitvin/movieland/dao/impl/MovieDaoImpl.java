@@ -20,9 +20,9 @@ public class MovieDaoImpl implements MovieDao {
     private static final String ALL_MOVIES_SELECT = "select * from MOVIE";
     private static final String MOVIE_BY_ID_SELECT = "select * from MOVIE where ID = ?";
     private static final String MAX_MOVIE_ID_SELECT = "select max(ID) from MOVIE";
-    private static final String COUNTRIES_BY_MOVIE_ID_SELECT = "select * from MOVIE_COUNTRY mc join COUNTRY c on mc.COUNTRY_ID = c.ID where mc.MOVIE_ID = ?";
-    private static final String GENRES_BY_MOVIE_ID_SELECT = "select * from MOVIE_GENRE mg join GENRE g on mg.GENRE_ID = g.ID where MOVIE_ID = ?";
-
+    private static final String COUNTRIES_BY_MOVIE_ID_SELECT = "select c.* from MOVIE_COUNTRY mc join COUNTRY c on mc.COUNTRY_ID = c.ID where mc.MOVIE_ID = ?";
+    private static final String GENRES_BY_MOVIE_ID_SELECT = "select g.* from MOVIE_GENRE mg join GENRE g on mg.GENRE_ID = g.ID where MOVIE_ID = ?";
+    private static final String MOVIE_BY_GENRE_ID_SELECT = "select m.* from MOVIE_GENRE mg join GENRE g on mg.GENRE_ID = g.ID where GENRE_ID = ?";
 
 //    @Autowired
 //    DataSource dataSource;
@@ -43,7 +43,7 @@ public class MovieDaoImpl implements MovieDao {
 
     @Override
     public Movie getById(int movieId) {
-        Movie movie = jdbcTemplate.queryForObject(MOVIE_BY_ID_SELECT,new Object[]{movieId}, new MovieMapper());
+        Movie movie = jdbcTemplate.queryForObject(MOVIE_BY_ID_SELECT, new Object[]{movieId}, new MovieMapper());
         movie.setGenres(getGenresByMovieId(movieId));
         movie.setCountries(getCountriesByMovieId(movieId));
         return movie;
@@ -51,8 +51,18 @@ public class MovieDaoImpl implements MovieDao {
 
     @Override
     public int getMaxMovieId() {
+        return jdbcTemplate.queryForObject(MAX_MOVIE_ID_SELECT, Integer.class);
+    }
 
-        return 0;
+    @Override
+    public List<Movie> getByGenreId(int genreId) {
+        List<Movie> movies = jdbcTemplate.query(MOVIE_BY_GENRE_ID_SELECT, new MovieMapper());
+        for (Movie movie : movies) {
+            movie.setGenres(getGenresByMovieId(movie.getId()));
+            movie.setCountries(getCountriesByMovieId(movie.getId()));
+        }
+        return movies;
+
     }
 
     private List<Genre> getGenresByMovieId(int movie_id) {

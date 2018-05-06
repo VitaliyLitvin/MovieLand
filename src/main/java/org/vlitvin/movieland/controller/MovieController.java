@@ -1,5 +1,7 @@
 package org.vlitvin.movieland.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.vlitvin.movieland.model.Movie;
@@ -28,7 +30,13 @@ public class MovieController {
 
     @GetMapping("/random")
     @ResponseBody
-    public List<Movie> getThreeRandomMovies(){
+    public List<Movie> getThreeRandomMovies() {
         return movieService.getThreeRandomMovies();
+    }
+
+    @GetMapping("genre/{genreId}")
+    @ResponseBody
+    public Movie getMovieByGenreId(@PathVariable("genreId") int genreId) {
+        return movieService.getByGenreId(genreId);
     }
 }

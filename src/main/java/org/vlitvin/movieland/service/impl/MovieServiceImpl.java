@@ -38,6 +38,11 @@ public class MovieServiceImpl implements MovieService {
         return movies;
     }
 
+    @Override
+    public List<Movie> getByGenreId(int genreId) {
+        return movieDao.getByGenreId(genreId);
+    }
+
     private Movie getRandomMovie() {
         int maxMovieId = movieDao.getMaxMovieId();
         Random random = new Random();
