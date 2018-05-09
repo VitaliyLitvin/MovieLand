@@ -13,4 +13,6 @@ public interface MovieService {
     List<Movie> getThreeRandomMovies();
 
     List<Movie> getByGenreId(int genreId);
+
+    void convertPriceByCurrency(Movie movie, String currency);
 }

@@ -24,9 +24,19 @@ public class MovieController {
 
     @GetMapping("/{movieId}")
     @ResponseBody
-    public Movie getMovieById(@PathVariable("movieId") int movieId) {
-        return movieService.getById(movieId);
+    public Movie getMovie(@PathVariable("movieId") int movieId, @RequestParam String currency) {
+        Movie movie = movieService.getById(movieId);
+        if (currency != null) {
+            movieService.convertPriceByCurrency(movie, currency);
+        }
+        return movie;
     }
+
+//    @GetMapping("/{movieId}")
+//    @ResponseBody
+//    public Movie getMovieById(@PathVariable("movieId") int movieId) {
+//        return movieService.getById(movieId);
+//    }
 
     @GetMapping("/random")
     @ResponseBody
@@ -36,7 +46,7 @@ public class MovieController {
 
     @GetMapping("genre/{genreId}")
     @ResponseBody
-    public Movie getMovieByGenreId(@PathVariable("genreId") int genreId) {
+    public List<Movie> getMovieByGenreId(@PathVariable("genreId") int genreId) {
         return movieService.getByGenreId(genreId);
     }
 }
