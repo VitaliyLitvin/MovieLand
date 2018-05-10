@@ -8,11 +8,11 @@ import java.util.List;
 public interface MovieService {
     List<Movie> getAll();
 
-    Movie getById(int movieId);
+    Movie getMovie(int movieId);
+
+    Movie getMovie(int movieId, String currency);
 
     List<Movie> getThreeRandomMovies();
 
     List<Movie> getByGenreId(int genreId);
-
-    void convertPriceByCurrency(Movie movie, String currency);
 }

@@ -24,19 +24,15 @@ public class MovieController {
 
     @GetMapping("/{movieId}")
     @ResponseBody
-    public Movie getMovie(@PathVariable("movieId") int movieId, @RequestParam String currency) {
-        Movie movie = movieService.getById(movieId);
+    public Movie getMovie(@PathVariable("movieId") int movieId, @RequestParam(required = false) String currency) {
+        Movie movie;
         if (currency != null) {
-            movieService.convertPriceByCurrency(movie, currency);
+            movie = movieService.getMovie(movieId, currency);
+        } else {
+            movie = movieService.getMovie(movieId);
         }
         return movie;
     }
-
-//    @GetMapping("/{movieId}")
-//    @ResponseBody
-//    public Movie getMovieById(@PathVariable("movieId") int movieId) {
-//        return movieService.getById(movieId);
-//    }
 
     @GetMapping("/random")
     @ResponseBody

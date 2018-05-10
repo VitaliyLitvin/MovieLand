@@ -24,15 +24,12 @@ public class MovieDaoImpl implements MovieDao {
     private static final String GENRES_BY_MOVIE_ID_SELECT = "select g.* from MOVIE_GENRE mg join GENRE g on mg.GENRE_ID = g.ID where MOVIE_ID = ?";
     private static final String MOVIE_BY_GENRE_ID_SELECT = "select m.* from MOVIE_GENRE mg join GENRE g on mg.GENRE_ID = g.ID where GENRE_ID = ?";
 
-//    @Autowired
-//    DataSource dataSource;
 
     @Autowired
     JdbcTemplate jdbcTemplate;
 
     @Override
     public List<Movie> getAll() {
-//        HikariDataSource hikariDataSource = (HikariDataSource) dataSource;
         List<Movie> movies = jdbcTemplate.query(ALL_MOVIES_SELECT, new MovieMapper());
         for (Movie movie : movies) {
             movie.setCountries(getCountriesByMovieId(movie.getId()));
@@ -42,7 +39,7 @@ public class MovieDaoImpl implements MovieDao {
     }
 
     @Override
-    public Movie getById(int movieId) {
+    public Movie getMovie(int movieId) {
         Movie movie = jdbcTemplate.queryForObject(MOVIE_BY_ID_SELECT, new Object[]{movieId}, new MovieMapper());
         movie.setGenres(getGenresByMovieId(movieId));
         movie.setCountries(getCountriesByMovieId(movieId));

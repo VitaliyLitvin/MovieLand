@@ -7,7 +7,7 @@ import java.util.List;
 public interface MovieDao {
     List<Movie> getAll();
 
-    Movie getById(int movieId);
+    Movie getMovie(int movieId);
 
     int getMaxMovieId();
 
